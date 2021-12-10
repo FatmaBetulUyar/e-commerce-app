@@ -1,12 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './reset.css';
+import { ChakraProvider } from "@chakra-ui/react"
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './context/AuthContext';
+import { BasketProvider } from './context/BasketContext';
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  }
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <AuthProvider>
+           <BasketProvider>
+          <App />
+          </BasketProvider>
+      </AuthProvider>
+      </ChakraProvider>
+
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
